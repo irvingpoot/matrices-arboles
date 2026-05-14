@@ -7,32 +7,36 @@ import Edge from '../components/Edge.astro';
 <Layout title="Matrices de adyacencia e incidencia">
 	<main class="flex flex-col w-6xl gap-4 bg-zinc-950 border border-zinc-700 rounded-xl">
 		<div>
-			<div class="text-center py-3">
-				<h1 class="text-3xl font-bold">Proyecto final</h1>
-				<p class="text-lg text-purple-400">Fase 2</p>
+			<div class="mt-3 text-center py-3">
+				<h1 class="text-4xl font-bold">Proyecto final</h1>
+				<p class="text-xl text-purple-400">Fase 2</p>
 			</div>
-			<form action="" class="flex flex-row gap-2 py-7 px-20 justify-between">
+			<div class="flex flex-row gap-2 py-7 px-20 justify-between">
 				<div class="flex flex-col gap-3 max-w-1/2">
 					<label class="text-xl">Etiquetas de los nodos</label>
-					<div class="flex flex-row gap-3">
-						<input type="text" class="bg-zinc-700 text-slate-50 text-center rounded-lg p-1 w-7" placeholder="A">
-						<input type="text" class="bg-zinc-700 text-slate-50 text-center rounded-lg p-1 w-7" placeholder="B">
-						<input type="text" class="bg-zinc-700 text-slate-50 text-center rounded-lg p-1 w-7" placeholder="C">
-						<input type="text" class="bg-zinc-700 text-slate-50 text-center rounded-lg p-1 w-7" placeholder="D">
-						<input type="text" class="bg-zinc-700 text-slate-50 text-center rounded-lg p-1 w-7" placeholder="E">
-						<input type="text" class="bg-zinc-700 text-slate-50 text-center rounded-lg p-1 w-7" placeholder="F">
-						<input type="text" class="bg-zinc-700 text-slate-50 text-center rounded-lg p-1 w-7" placeholder="G">
-						<input type="text" class="bg-zinc-700 text-slate-50 text-center rounded-lg p-1 w-7" placeholder="H">
+					<div id="nodes-container" class="flex flex-row gap-3">
+						<input type="text" class="node-input bg-zinc-700 text-slate-50 text-center rounded-lg p-1 w-7" placeholder="A" maxlength="1">
+						<input type="text" class="node-input bg-zinc-700 text-slate-50 text-center rounded-lg p-1 w-7" placeholder="B" maxlength="1">
+						<input type="text" class="node-input bg-zinc-700 text-slate-50 text-center rounded-lg p-1 w-7" placeholder="C" maxlength="1">
+						<input type="text" class="node-input bg-zinc-700 text-slate-50 text-center rounded-lg p-1 w-7" placeholder="D" maxlength="1">
+						<input type="text" class="node-input bg-zinc-700 text-slate-50 text-center rounded-lg p-1 w-7" placeholder="E" maxlength="1">
+						<input type="text" class="node-input bg-zinc-700 text-slate-50 text-center rounded-lg p-1 w-7" placeholder="F" maxlength="1">
+						<input type="text" class="node-input bg-zinc-700 text-slate-50 text-center rounded-lg p-1 w-7" placeholder="G" maxlength="1">
+						<input type="text" class="node-input bg-zinc-700 text-slate-50 text-center rounded-lg p-1 w-7" placeholder="H" maxlength="1">
 					</div>
 
-					<button type="submit" class="mt-5 py-2 px-4 bg-purple-700 hover:bg-purple-500 text-white font-bold rounded-lg">
+					<button id="btn-generar" type="button" class="mt-5 py-2 px-4 bg-purple-700 hover:bg-purple-500 text-white font-bold rounded-lg transition-colors duration-200">
 						Generar matrices
 					</button>
 
+					<button id="btn-limpiar" type="button" class="py-2 px-4 bg-zinc-600 hover:bg-zinc-400 text-white font-bold rounded-lg transition-colors duration-200">
+						Limpiar campos
+					</button>
 				</div>
+
 				<div class="flex flex-col gap-2 max-w-1/2">
 					<label class="text-xl">Aristas</label>
-					<div class="grid grid-cols-4 gap-3">
+					<div id="edges-container" class="grid grid-cols-4 gap-3">
 						<Edge name="arista1" />
 						<Edge name="arista2" />
 						<Edge name="arista3" />
@@ -47,15 +51,490 @@ import Edge from '../components/Edge.astro';
 						<Edge name="arista12" />
 					</div>
 				</div>
-			</form>
-		</div>
-		<div class="flex flex-row">
-			<div class="border border-zinc-700 grow">
-				
 			</div>
-			<div class="border border-zinc-700 grow">
-				
+		</div>
+
+		<div class="flex flex-row">
+			<div class="border-t border-r border-zinc-700 grow p-5">
+				<h2 class="text-xl font-bold text-purple-400 mb-3 text-center">Matriz de Adyacencia</h2>
+				<div id="adj-matrix" class="overflow-x-auto">
+					<p class="text-zinc-500 text-center text-sm">Ingresa nodos y aristas, luego presiona "Generar matrices".</p>
+				</div>
+			</div>
+			<div class="border-t border-l border-zinc-700 grow p-5">
+				<h2 class="text-xl font-bold text-purple-400 mb-3 text-center">Matriz de Incidencia</h2>
+				<div id="inc-matrix" class="overflow-x-auto">
+					<p class="text-zinc-500 text-center text-sm">Ingresa nodos y aristas, luego presiona "Generar matrices".</p>
+				</div>
 			</div>
 		</div>
 	</main>
+
+	<div id="error-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+		<div class="absolute inset-0 bg-black/60 backdrop-blur-sm" id="modal-backdrop"></div>
+		<div class="relative bg-zinc-900 border border-red-500/60 rounded-xl shadow-2xl p-7 max-w-sm w-full mx-4 flex flex-col gap-4">
+			<div class="flex items-center gap-3">
+				<span class="text-red-400 text-2xl">&#9888;</span>
+				<h3 class="text-lg font-bold text-red-400">Error de validación</h3>
+			</div>
+			<p id="modal-msg" class="text-slate-200 text-sm leading-relaxed"></p>
+			<button id="modal-close" class="self-end mt-1 py-1.5 px-5 bg-red-700 hover:bg-red-500 text-white font-bold rounded-lg transition-colors duration-200">
+				Entendido
+			</button>
+		</div>
+	</div>
 </Layout>
+
+<style>
+	.matrix-table {
+		border-collapse: separate;
+		border-spacing: 4px;
+		font-size: 0.95rem;
+		margin: 0 auto;
+		table-layout: fixed;
+	}
+
+	/* Celda base */
+	.matrix-table th,
+	.matrix-table td {
+		box-sizing: border-box;
+		min-width: 2.4rem;
+		min-height: 2.4rem;
+		padding: 0.45rem 0.6rem;
+		text-align: center;
+		vertical-align: middle;
+		border-radius: 6px;
+		white-space: nowrap;
+	}
+
+	/* Esquina vacía (top-left) */
+	.matrix-table thead tr th:first-child {
+		background: transparent;
+	}
+
+	/* Encabezados de columna */
+	.matrix-table th {
+		background-color: #3b1f6b;
+		color: #d8b4fe;
+		font-weight: 700;
+		letter-spacing: 0.03em;
+	}
+
+	/* Encabezados de fila */
+	.matrix-table td.header-cell {
+		background-color: #3b1f6b;
+		color: #d8b4fe;
+		font-weight: 700;
+	}
+
+	/* Valor 1 */
+	.matrix-table td.val-1 {
+		background-color: #4c1d95;
+		color: #e9d5ff;
+		font-weight: 700;
+		box-shadow: inset 0 0 0 1px #7c3aed55;
+	}
+
+	/* Valor 0 */
+	.matrix-table td.val-0 {
+		background-color: #1c1c27;
+		color: #3f3f5a;
+		border: 1px solid #2d2d3d;
+	}
+
+	/* Resaltado de input inválido */
+	input.input-error {
+		outline: 2px solid #f87171;
+		background-color: #3f1f1f;
+	}
+
+	/* Animación de entrada del modal */
+	#error-modal:not(.hidden) > div:last-child {
+		animation: modal-in 0.18s ease-out;
+	}
+	@keyframes modal-in {
+		from { opacity: 0; transform: scale(0.95) translateY(-8px); }
+		to   { opacity: 1; transform: scale(1) translateY(0); }
+	}
+</style>
+
+<script>
+
+	// CONSTANTES Y CONFIGURACIÓN
+	/**
+	 * Expresión regular que valida que un valor sea exactamente una letra
+	 * del alfabeto (mayúscula o minúscula). No se permiten números, espacios
+	 * ni ningún otro símbolo.
+	 */
+	const LETTER_RE = /^[a-zA-Z]$/;
+
+	/**
+	 * Objeto con los estilos inline para cada tipo de celda de la tabla.
+	 * Se usan estilos inline porque el HTML de las
+	 * matrices se genera dinámicamente con innerHTML, y los estilos scoped
+	 * de Astro no se aplican a elementos creados en tiempo de ejecución.
+	 */
+	const CELL_STYLES = {
+		/** Estilo de la tabla completa */
+		table:    'border-collapse:separate;border-spacing:5px;font-size:0.95rem;margin:0 auto;',
+		/** Celda de esquina superior izquierda */
+		thCorner: 'padding:8px 14px;background:transparent;',
+		/** Encabezados de columna (etiquetas de nodos o aristas) */
+		th:       'padding:8px 14px;text-align:center;vertical-align:middle;border-radius:6px;background:#3b1f6b;color:#d8b4fe;font-weight:700;white-space:nowrap;',
+		/** Encabezados de fila (etiqueta del nodo en cada fila) */
+		header:   'padding:8px 14px;text-align:center;vertical-align:middle;border-radius:6px;background:#3b1f6b;color:#d8b4fe;font-weight:700;white-space:nowrap;',
+		/** Celda con valor 1: nodo conectado / incidente */
+		val1:     'padding:8px 14px;text-align:center;vertical-align:middle;border-radius:6px;background:#4c1d95;color:#e9d5ff;font-weight:700;',
+		/** Celda con valor 0: nodo sin conexión */
+		val0:     'padding:8px 14px;text-align:center;vertical-align:middle;border-radius:6px;background:#1c1c27;color:#52526a;border:1px solid #2d2d3d;',
+	} as const;
+
+	// TIPOS
+	/** Representa una arista como un par ordenado de etiquetas de nodo. */
+	type Edge = [string, string];
+
+	/** Resultado exitoso al leer los nodos del formulario. */
+	type NodesOk   = { ok: true;  nodes: string[] };
+
+	/** Resultado fallido al leer los nodos del formulario. */
+	type NodesErr  = { ok: false; message: string };
+	type NodesResult = NodesOk | NodesErr;
+
+	/** Resultado exitoso al leer las aristas del formulario. */
+	type EdgesOk   = { ok: true;  edges: Edge[] };
+	
+	/** Resultado fallido al leer las aristas del formulario. */
+	type EdgesErr  = { ok: false; message: string };
+	type EdgesResult = EdgesOk | EdgesErr;
+
+	// MODAL DE ERRORES
+	/**
+	 * Muestra el modal de error con el mensaje indicado.
+	 * @param message - Texto descriptivo del error que se mostrará al usuario.
+	 */
+	function showModal(message: string): void {
+		const modal = document.getElementById('error-modal')!;
+		document.getElementById('modal-msg')!.textContent = message;
+		modal.classList.remove('hidden');
+	}
+
+	/**
+	 * Oculta el modal de error.
+	 */
+	function closeModal(): void {
+		document.getElementById('error-modal')!.classList.add('hidden');
+	}
+
+	// Cierra el modal al hacer clic en el botón "Entendido"
+	document.getElementById('modal-close')?.addEventListener('click', closeModal);
+
+	// Cierra el modal al hacer clic en el fondo
+	document.getElementById('modal-backdrop')?.addEventListener('click', closeModal);
+
+	// Cierra el modal al presionar la tecla Escape
+	document.addEventListener('keydown', (e) => {
+		if (e.key === 'Escape') closeModal();
+	});
+
+	// VALIDACIÓN EN TIEMPO REAL
+	/**
+	 * Adjunta validación en tiempo real a un input de texto.
+	 * - Bloquea cualquier caracter que no sea una letra (A-Z, a-z).
+	 * - Si se ingresa un caracter inválido, lo elimina y resalta el input en rojo.
+	 * - Intercepta el pegado (Ctrl+V) y extrae solo la primera letra válida.
+	 *
+	 * @param input - El elemento HTMLInputElement al que se le adjunta la validación.
+	 */
+	function attachLiveValidation(input: HTMLInputElement): void {
+		/**
+		 * Listener del evento 'input': se dispara cada vez que el valor cambia.
+		 * Elimina caracteres inválidos y aplica/quita el estilo de error.
+		 */
+		input.addEventListener('input', () => {
+			const val = input.value;
+
+			// Si el campo quedó vacío, no hay nada que validar
+			if (val === '') {
+				input.classList.remove('input-error');
+				return;
+			}
+
+			// Si el valor no es una letra, se limpian los caracteres inválidos
+			if (!LETTER_RE.test(val)) {
+				input.value = val.replace(/[^a-zA-Z]/g, '');
+
+				// Si después de limpiar el campo queda vacío, mostrar error visual
+				if (input.value === '') {
+					input.classList.add('input-error');
+					// El borde de error desaparece automáticamente después de 800ms
+					setTimeout(() => input.classList.remove('input-error'), 800);
+				}
+			} else {
+				input.classList.remove('input-error');
+			}
+		});
+
+		/**
+		 * Listener del evento 'paste': intercepta el pegado de texto.
+		 * Previene el comportamiento por defecto y extrae solo la primera
+		 * letra válida del texto pegado.
+		 */
+		input.addEventListener('paste', (e) => {
+			e.preventDefault();
+			const pasted = e.clipboardData?.getData('text') ?? '';
+			// Eliminar todo lo que no sea letra y tomar solo el primer caracter
+			const firstValidLetter = pasted.trim().replace(/[^a-zA-Z]/g, '').charAt(0);
+			if (firstValidLetter) input.value = firstValidLetter;
+		});
+	}
+
+	// Adjuntar validación a todos los inputs de nodos y aristas al cargar la página
+	document.querySelectorAll<HTMLInputElement>('.node-input').forEach(attachLiveValidation);
+	document.querySelectorAll<HTMLInputElement>('#edges-container input').forEach(attachLiveValidation);
+
+	// LECTURA Y VALIDACIÓN DE DATOS DEL FORMULARIO
+	/**
+	 * Lee y valida la lista de nodos desde los inputs del formulario.
+	 * - Ignora inputs vacíos.
+	 * - Rechaza valores que no sean una sola letra.
+	 * - Rechaza nodos duplicados.
+	 * - Requiere un mínimo de 8 nodos para formar un grafo.
+	 *
+	 * @returns NodesResult - { ok: true, nodes } si es válido, o { ok: false, message } si hay error.
+	 */
+	function readNodes(): NodesResult {
+		const nodeInputs = Array.from(document.querySelectorAll<HTMLInputElement>('.node-input'));
+		const nodes: string[] = [];
+
+		for (const input of nodeInputs) {
+			const val = input.value.trim();
+			if (val === '') continue; // los inputs vacíos se ignoran
+
+			if (!LETTER_RE.test(val)) {
+				input.classList.add('input-error');
+				return { ok: false, message: `El nodo "${val}" no es válido. Cada nodo debe ser una única letra (A-Z).` };
+			}
+
+			nodes.push(val.toUpperCase());
+		}
+
+		if (nodes.length < 8) {
+			return { ok: false, message: 'Debes ingresar 8 nodos.' };
+		}
+
+		// Detectar nodos duplicados comparando el array original con uno sin repetidos
+		const uniqueNodes = [...new Set(nodes)];
+		if (uniqueNodes.length !== nodes.length) {
+			return { ok: false, message: 'Los nodos deben ser únicos. Hay letras repetidas en la lista de nodos.' };
+		}
+
+		return { ok: true, nodes };
+	}
+
+	/**
+	 * Lee y valida la lista de aristas desde los inputs del formulario.
+	 * - Ignora pares de inputs completamente vacíos.
+	 * - Rechaza aristas donde solo uno de los dos extremos esté definido.
+	 * - Rechaza valores que no sean una sola letra.
+	 * - Rechaza aristas cuyos nodos no existan en la lista de nodos del grafo.
+	 * - Requiere al menos una arista para generar las matrices.
+	 *
+	 * @param nodes - Lista de nodos válidos del grafo (en mayúscula).
+	 * @returns EdgesResult - { ok: true, edges } si es válido, o { ok: false, message } si hay error.
+	 */
+	function readEdges(nodes: string[]): EdgesResult {
+		const edgeDivs = document.querySelectorAll<HTMLDivElement>('#edges-container > div');
+		const edges: Edge[] = [];
+
+		for (const div of edgeDivs) {
+			// Cada componente Edge genera dos inputs: uno con name="aristaN-from" y otro con name="aristaN-to"
+			const fromInput = div.querySelector<HTMLInputElement>('input[name$="-from"]');
+			const toInput   = div.querySelector<HTMLInputElement>('input[name$="-to"]');
+
+			const rawU = fromInput?.value.trim() ?? '';
+			const rawV = toInput?.value.trim() ?? '';
+
+			// Si ambos campos están vacíos, esta arista no fue definida, entonces se omite
+			if (!rawU && !rawV) continue;
+
+			// Validar que los valores ingresados sean letras válidas
+			if (rawU && !LETTER_RE.test(rawU)) {
+				fromInput?.classList.add('input-error');
+				return { ok: false, message: `El valor "${rawU}" en una arista no es válido. Solo se admite una letra (A-Z).` };
+			}
+			if (rawV && !LETTER_RE.test(rawV)) {
+				toInput?.classList.add('input-error');
+				return { ok: false, message: `El valor "${rawV}" en una arista no es válido. Solo se admite una letra (A-Z).` };
+			}
+
+			// Arista incompleta: solo uno de los dos extremos fue definido
+			if (!rawU || !rawV) {
+				return { ok: false, message: 'Una arista tiene solo un nodo definido. Completa ambos extremos o déjala vacía.' };
+			}
+
+			const u = rawU.toUpperCase();
+			const v = rawV.toUpperCase();
+
+			// Verificar que ambos nodos de la arista existan en el grafo
+			if (!nodes.includes(u)) {
+				return { ok: false, message: `El nodo "${u}" en una arista no existe en la lista de nodos.` };
+			}
+			if (!nodes.includes(v)) {
+				return { ok: false, message: `El nodo "${v}" en una arista no existe en la lista de nodos.` };
+			}
+
+			edges.push([u, v]);
+		}
+
+		if (edges.length < 12) {
+			return { ok: false, message: 'Debes ingresar las 12 aristas.' };
+		}
+
+		return { ok: true, edges };
+	}
+
+	// CÁLCULO DE MATRICES
+	/**
+	 * Calcula la matriz de adyacencia de un grafo no dirigido.
+	 *
+	 * La matriz de adyacencia A es de tamaño n×n (donde n = número de nodos).
+	 * El valor A[i][j] = 1 indica que existe una arista entre el nodo i y el nodo j.
+	 * Como el grafo es no dirigido, la matriz es simétrica: A[i][j] = A[j][i].
+	 *
+	 * @param nodes - Lista de etiquetas de nodos (en mayúscula).
+	 * @param edges - Lista de aristas como pares [nodoOrigen, nodoDestino].
+	 * @returns Matriz de adyacencia de tamaño n×n con valores 0 o 1.
+	 */
+	function buildAdjacencyMatrix(nodes: string[], edges: Edge[]): number[][] {
+		const n = nodes.length;
+
+		// Inicializar la matriz n×n con ceros
+		const matrix: number[][] = Array.from({ length: n }, () => Array(n).fill(0));
+
+		for (const [u, v] of edges) {
+			const i = nodes.indexOf(u);
+			const j = nodes.indexOf(v);
+			// Marcar ambas direcciones porque el grafo es no dirigido
+			matrix[i][j] = 1;
+			matrix[j][i] = 1;
+		}
+
+		return matrix;
+	}
+
+	/**
+	 * Calcula la matriz de incidencia de un grafo no dirigido.
+	 *
+	 * La matriz de incidencia B es de tamaño n×m (n = nodos, m = aristas).
+	 * El valor B[i][e] = 1 indica que el nodo i es un extremo de la arista e.
+	 * Para cada arista e = (u, v), se marcan con 1 las filas de u y v.
+	 *
+	 * @param nodes - Lista de etiquetas de nodos (en mayúscula).
+	 * @param edges - Lista de aristas como pares [nodoOrigen, nodoDestino].
+	 * @returns Matriz de incidencia de tamaño n×m con valores 0 o 1.
+	 */
+	function buildIncidenceMatrix(nodes: string[], edges: Edge[]): number[][] {
+		const n = nodes.length;
+		const m = edges.length;
+
+		// Inicializar la matriz n×m con ceros
+		const matrix: number[][] = Array.from({ length: n }, () => Array(m).fill(0));
+
+		for (let e = 0; e < edges.length; e++) {
+			const [u, v] = edges[e];
+			const i = nodes.indexOf(u);
+			const j = nodes.indexOf(v);
+			// Ambos extremos de la arista son incidentes con ella
+			matrix[i][e] = 1;
+			matrix[j][e] = 1;
+		}
+
+		return matrix;
+	}
+
+	// MÓDULO: RENDERIZADO
+	/**
+	 * Genera el HTML de una tabla que representa una matriz y lo inyecta
+	 * en el contenedor indicado.
+	 *
+	 * @param containerId - ID del elemento HTML donde se renderizará la tabla.
+	 * @param rowLabels   - Etiquetas para las filas.
+	 * @param colLabels   - Etiquetas para las columnas.
+	 * @param data        - Matriz numérica de valores 0 o 1 a mostrar.
+	 */
+	function renderMatrix(
+		containerId: string,
+		rowLabels: string[],
+		colLabels: string[],
+		data: number[][]
+	): void {
+		const container = document.getElementById(containerId)!;
+
+		// Fila de encabezados de columna
+		const headerCells = colLabels
+			.map(col => `<th style="${CELL_STYLES.th}">${col}</th>`)
+			.join('');
+
+		// Filas del cuerpo de la tabla
+		const bodyRows = rowLabels.map((label, i) => {
+			const dataCells = data[i]
+				.map(val => `<td style="${val === 1 ? CELL_STYLES.val1 : CELL_STYLES.val0}">${val}</td>`)
+				.join('');
+			return `<tr><td style="${CELL_STYLES.header}">${label}</td>${dataCells}</tr>`;
+		}).join('');
+
+		container.innerHTML = `
+			<table style="${CELL_STYLES.table}">
+				<thead>
+					<tr>
+						<th style="${CELL_STYLES.thCorner}"></th>
+						${headerCells}
+					</tr>
+				</thead>
+				<tbody>
+					${bodyRows}
+				</tbody>
+			</table>
+		`;
+	}
+
+	// Función principal
+	/**
+	 * Manejador del botón "Generar matrices".
+	 * Coordina el flujo completo:
+	 *   1. Lee y valida los nodos del formulario.
+	 *   2. Lee y valida las aristas del formulario.
+	 *   3. Calcula la matriz de adyacencia.
+	 *   4. Calcula la matriz de incidencia.
+	 *   5. Renderiza ambas matrices en sus respectivos contenedores.
+	 */
+	function handleGenerarClick(): void {
+		// Paso 1: leer nodos
+		const nodesResult = readNodes();
+		if (!nodesResult.ok) {
+			showModal(nodesResult.message);
+			return;
+		}
+		const { nodes } = nodesResult;
+
+		// Paso 2: leer aristas
+		const edgesResult = readEdges(nodes);
+		if (!edgesResult.ok) {
+			showModal(edgesResult.message);
+			return;
+		}
+		const { edges } = edgesResult;
+
+		// Paso 3 y 4: calcular matrices
+		const adjacencyMatrix = buildAdjacencyMatrix(nodes, edges);
+		const incidenceMatrix = buildIncidenceMatrix(nodes, edges);
+
+		// Paso 5: renderizar
+		// Las columnas de la incidencia se etiquetan como e1, e2, e3...
+		const edgeLabels = edges.map((_, k) => `e${k + 1}`);
+		renderMatrix('adj-matrix', nodes, nodes,      adjacencyMatrix);
+		renderMatrix('inc-matrix', nodes, edgeLabels, incidenceMatrix);
+	}
+
+	document.getElementById('btn-generar')?.addEventListener('click', handleGenerarClick);
+</script>

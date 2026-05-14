@@ -1,7 +1,20 @@
 ---
 import '../styles/global.css';
 import '@fontsource-variable/fraunces/wght.css';
+
 const { title } = Astro.props;
+
+const NUM_STARS = 150;
+
+const stars = Array.from({ length: NUM_STARS }).map(() => {
+	return {
+		x: Math.random() * 100,
+		y: Math.random() * 100,
+		size: Math.random() * 2 + 1,
+		delay: Math.random() * 4,
+		duration: Math.random() * 3 + 2,
+	};
+});
 ---
 
 <!doctype html>
@@ -9,12 +22,24 @@ const { title } = Astro.props;
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<link rel="icon" href="/icon.ico" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 	</head>
-	<body class="flex bg-black text-slate-50 items-center justify-center w-screen h-screen">
+	<body class="flex bg-black text-slate-50 items-center justify-center w-screen h-screen overflow-hidden">
+		{stars.map((star) => (
+			<div
+				class="absolute bg-white rounded-full animate-pulse opacity-70"
+				style={`
+					left: ${star.x}%; 
+					top: ${star.y}%; 
+					width: ${star.size}px; 
+					height: ${star.size}px; 
+					animation-delay: ${star.delay}s;
+					animation-duration: ${star.duration}s;
+				`}
+			/>
+		))}
 		<slot />
 	</body>
 </html>
