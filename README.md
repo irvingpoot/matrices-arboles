@@ -6,10 +6,10 @@ Aplicación web que calcula y visualiza la **matriz de adyacencia** y la **matri
 
 ## Tecnologías
 
-- [Astro 6](https://astro.build/) — framework de generación de sitios web
-- [Tailwind CSS 4](https://tailwindcss.com/) — estilos utilitarios
-- [Fraunces](https://fonts.google.com/specimen/Fraunces) — tipografía principal (vía `@fontsource-variable`)
-- TypeScript — tipado estático en el script del cliente
+- [Astro 6:](https://astro.build/) framework de generación de sitios web
+- [Tailwind CSS 4:](https://tailwindcss.com/) estilos utilitarios
+- [Fraunces:](https://fonts.google.com/specimen/Fraunces) tipografía principal (vía `@fontsource-variable`)
+- TypeScript: tipado estático en el script del cliente
 
 ---
 
@@ -46,10 +46,10 @@ npm run build
 
 ## Cómo usar la aplicación
 
-1. **Ingresa los nodos** — escribe una letra por cada campo (A–Z). Se aceptan solamente 8 nodos. No se permiten números, símbolos ni letras repetidas.
-2. **Ingresa las aristas** — cada arista es un par `(nodo origen, nodo destino)`. Hay que definir 12 aristas.
-3. **Presiona "Generar matrices"** — la aplicación calcula y muestra ambas matrices.
-4. **Presiona "Limpiar campos"** — resetea todos los inputs y las matrices.
+1. **Ingresa los nodos:** escribe una letra por cada campo (A–Z). Se aceptan solamente 8 nodos. No se permiten números, símbolos ni letras repetidas.
+2. **Ingresa las aristas:** cada arista es un par `(nodo origen, nodo destino)`. Hay que definir 12 aristas.
+3. **Presiona "Generar matrices":** la aplicación calcula y muestra ambas matrices.
+4. **Presiona "Limpiar campos":** resetea todos los inputs y las matrices.
 
 ---
 
