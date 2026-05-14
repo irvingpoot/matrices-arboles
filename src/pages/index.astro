@@ -1,0 +1,61 @@
+---
+import "../styles/global.css";
+import Layout from '../layouts/Layout.astro';
+import Edge from '../components/Edge.astro';
+---
+
+<Layout title="Matrices de adyacencia e incidencia">
+	<main class="flex flex-col w-6xl gap-4 bg-zinc-950 border border-zinc-700 rounded-xl">
+		<div>
+			<div class="text-center py-3">
+				<h1 class="text-3xl font-bold">Proyecto final</h1>
+				<p class="text-lg text-purple-400">Fase 2</p>
+			</div>
+			<form action="" class="flex flex-row gap-2 py-7 px-20 justify-between">
+				<div class="flex flex-col gap-3 max-w-1/2">
+					<label class="text-xl">Etiquetas de los nodos</label>
+					<div class="flex flex-row gap-3">
+						<input type="text" class="bg-zinc-700 text-slate-50 text-center rounded-lg p-1 w-7" placeholder="A">
+						<input type="text" class="bg-zinc-700 text-slate-50 text-center rounded-lg p-1 w-7" placeholder="B">
+						<input type="text" class="bg-zinc-700 text-slate-50 text-center rounded-lg p-1 w-7" placeholder="C">
+						<input type="text" class="bg-zinc-700 text-slate-50 text-center rounded-lg p-1 w-7" placeholder="D">
+						<input type="text" class="bg-zinc-700 text-slate-50 text-center rounded-lg p-1 w-7" placeholder="E">
+						<input type="text" class="bg-zinc-700 text-slate-50 text-center rounded-lg p-1 w-7" placeholder="F">
+						<input type="text" class="bg-zinc-700 text-slate-50 text-center rounded-lg p-1 w-7" placeholder="G">
+						<input type="text" class="bg-zinc-700 text-slate-50 text-center rounded-lg p-1 w-7" placeholder="H">
+					</div>
+
+					<button type="submit" class="mt-5 py-2 px-4 bg-purple-700 hover:bg-purple-500 text-white font-bold rounded-lg">
+						Generar matrices
+					</button>
+
+				</div>
+				<div class="flex flex-col gap-2 max-w-1/2">
+					<label class="text-xl">Aristas</label>
+					<div class="grid grid-cols-4 gap-3">
+						<Edge name="arista1" />
+						<Edge name="arista2" />
+						<Edge name="arista3" />
+						<Edge name="arista4" />
+						<Edge name="arista5" />
+						<Edge name="arista6" />
+						<Edge name="arista7" />
+						<Edge name="arista8" />
+						<Edge name="arista9" />
+						<Edge name="arista10" />
+						<Edge name="arista11" />
+						<Edge name="arista12" />
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="flex flex-row">
+			<div class="border border-zinc-700 grow">
+				
+			</div>
+			<div class="border border-zinc-700 grow">
+				
+			</div>
+		</div>
+	</main>
+</Layout>
