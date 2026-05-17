@@ -5,7 +5,7 @@ import Edge from '../components/Edge.astro';
 ---
 
 <Layout title="Matrices de adyacencia e incidencia">
-	<main class="flex flex-col w-6xl gap-4 bg-zinc-950 border border-zinc-700 rounded-xl">
+	<main class="flex flex-col w-full max-w-6xl bg-[#09090b] border border-zinc-700 rounded-xl" style="height:calc(100vh - 3rem);">
 		<div>
 			<div class="mt-3 text-center py-3">
 				<h1 class="text-4xl font-bold">Proyecto final</h1>
@@ -54,16 +54,16 @@ import Edge from '../components/Edge.astro';
 			</div>
 		</div>
 
-		<div class="flex flex-row">
-			<div class="border-t border-r border-zinc-700 grow p-5">
+		<div class="flex flex-row flex-1 min-h-0">
+			<div class="border-t border-r border-zinc-700 grow p-5 flex flex-col min-h-0">
 				<h2 class="text-xl font-bold text-purple-400 mb-3 text-center">Matriz de Adyacencia</h2>
-				<div id="adj-matrix" class="overflow-x-auto">
+				<div id="adj-matrix" class="overflow-auto flex-1 min-h-0">
 					<p class="text-zinc-500 text-center text-sm">Ingresa nodos y aristas, luego presiona "Generar matrices".</p>
 				</div>
 			</div>
-			<div class="border-t border-l border-zinc-700 grow p-5">
+			<div class="border-t border-l border-zinc-700 grow p-5 flex flex-col min-h-0">
 				<h2 class="text-xl font-bold text-purple-400 mb-3 text-center">Matriz de Incidencia</h2>
-				<div id="inc-matrix" class="overflow-x-auto">
+				<div id="inc-matrix" class="overflow-auto flex-1 min-h-0">
 					<p class="text-zinc-500 text-center text-sm">Ingresa nodos y aristas, luego presiona "Generar matrices".</p>
 				</div>
 			</div>
@@ -163,10 +163,10 @@ import Edge from '../components/Edge.astro';
 	// CONSTANTES Y CONFIGURACIÓN
 	/**
 	 * Expresión regular que valida que un valor sea exactamente una letra
-	 * del alfabeto (mayúscula o minúscula). No se permiten números, espacios
+	 * del alfabeto (mayúscula o minúscula). No se permiten espacios
 	 * ni ningún otro símbolo.
 	 */
-	const LETTER_RE = /^[a-zA-Z]$/;
+	const ALPHANUM_RE = /^[a-zA-Z0-9]$/;
 
 	/**
 	 * Objeto con los estilos inline para cada tipo de celda de la tabla.
@@ -260,8 +260,8 @@ import Edge from '../components/Edge.astro';
 			}
 
 			// Si el valor no es una letra, se limpian los caracteres inválidos
-			if (!LETTER_RE.test(val)) {
-				input.value = val.replace(/[^a-zA-Z]/g, '');
+			if (!ALPHANUM_RE.test(val)) {
+				input.value = val.replace(/[^a-zA-Z0-9]/g, '');
 
 				// Si después de limpiar el campo queda vacío, mostrar error visual
 				if (input.value === '') {
@@ -283,8 +283,8 @@ import Edge from '../components/Edge.astro';
 			e.preventDefault();
 			const pasted = e.clipboardData?.getData('text') ?? '';
 			// Eliminar todo lo que no sea letra y tomar solo el primer caracter
-			const firstValidLetter = pasted.trim().replace(/[^a-zA-Z]/g, '').charAt(0);
-			if (firstValidLetter) input.value = firstValidLetter;
+			const firstValidChar = pasted.trim().replace(/[^a-zA-Z0-9]/g, '').charAt(0);
+			if (firstValidChar) input.value = firstValidChar;
 		});
 	}
 
@@ -310,9 +310,9 @@ import Edge from '../components/Edge.astro';
 			const val = input.value.trim();
 			if (val === '') continue; // los inputs vacíos se ignoran
 
-			if (!LETTER_RE.test(val)) {
+			if (!ALPHANUM_RE.test(val)) {
 				input.classList.add('input-error');
-				return { ok: false, message: `El nodo "${val}" no es válido. Cada nodo debe ser una única letra (A-Z).` };
+				return { ok: false, message: `El nodo "${val}" no es válido. Cada nodo debe ser una única letra (A-Z) o un dígito (0-9).` };
 			}
 
 			nodes.push(val.toUpperCase());
@@ -325,7 +325,7 @@ import Edge from '../components/Edge.astro';
 		// Detectar nodos duplicados comparando el array original con uno sin repetidos
 		const uniqueNodes = [...new Set(nodes)];
 		if (uniqueNodes.length !== nodes.length) {
-			return { ok: false, message: 'Los nodos deben ser únicos. Hay letras repetidas en la lista de nodos.' };
+			return { ok: false, message: 'Los nodos deben ser únicos. Hay valores repetidos en la lista de nodos.' };
 		}
 
 		return { ok: true, nodes };
@@ -358,13 +358,13 @@ import Edge from '../components/Edge.astro';
 			if (!rawU && !rawV) continue;
 
 			// Validar que los valores ingresados sean letras válidas
-			if (rawU && !LETTER_RE.test(rawU)) {
+			if (rawU && !ALPHANUM_RE.test(rawU)) {
 				fromInput?.classList.add('input-error');
-				return { ok: false, message: `El valor "${rawU}" en una arista no es válido. Solo se admite una letra (A-Z).` };
+				return { ok: false, message: `El valor "${rawU}" en una arista no es válido. Solo se admite una letra (A-Z) o un dígito (0-9).` };
 			}
-			if (rawV && !LETTER_RE.test(rawV)) {
+			if (rawV && !ALPHANUM_RE.test(rawV)) {
 				toInput?.classList.add('input-error');
-				return { ok: false, message: `El valor "${rawV}" en una arista no es válido. Solo se admite una letra (A-Z).` };
+				return { ok: false, message: `El valor "${rawV}" en una arista no es válido. Solo se admite una letra (A-Z) o un dígito (0-9).` };
 			}
 
 			// Arista incompleta: solo uno de los dos extremos fue definido
